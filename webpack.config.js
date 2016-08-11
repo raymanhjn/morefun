@@ -1,19 +1,31 @@
+var webpack = require('webpack');
 module.exports = {
-  entry: './src/main.js',
+  entry: [
+    'webpack-dev-server/client?http://localhost:8080', // WebpackDevServer host and port
+    'webpack/hot/only-dev-server', // "only" prevents reload on syntax errors
+    './src/index.js'
+  ],
   output: {
-    path: './src',
-    filename: 'bundle.js'       
+    path: __dirname,
+    publicPath: '/',
+    filename: 'bundle.js'
   },
+  plugins: [
+   new webpack.HotModuleReplacementPlugin(),
+  ],
   module: {
     loaders: [
       {
-        test: /\.js$/,
         exclude: /node_modules/,
-        loader: 'babel-loader'
+        loaders: ['react-hot', 'babel?presets[]=react,presets[]=es2015,presets[]=stage-1']
       }
-    ]
+   ]
   },
   resolve: {
-    extensions: ['', '.js', '.json'] 
+    extensions: ['', '.js', '.jsx']
+  },
+  devServer: {
+    historyApiFallback: true,
+    contentBase: './'
   }
 };
